@@ -1,0 +1,358 @@
+{
+  "Sitzung: Dokumentkopf": {
+    "prefix": [
+      "smin"
+    ],
+    "body": [
+      "#show: minutes.with(",
+      "  committee: \"${1:Gremium}\",",
+      "  session: \"${2:1. Sitzung des Gremiums}\",",
+      "  date: datetime(year: ${3:$CURRENT_YEAR}, month: ${4:$CURRENT_MONTH}, day: ${5:$CURRENT_DATE}),",
+      "  sensitivity: ${6|1,2,3|},",
+      "  logo: image(\"${7:logo.png}\"),",
+      ")",
+      "",
+      ""
+    ],
+    "description": "minutes.with(...) mit Gremium, Sitzung, Datum, Sensitivität, Logo"
+  },
+  "Sitzung: Sitzungsdaten": {
+    "prefix": [
+      "si"
+    ],
+    "body": [
+      "#qtable(",
+      "  [Sitzungsleitung:],                           n[$1],",
+      "  [Schriftführende Person:],                    n[$2],",
+      "  [Anwesende Personen:],                        [${3:s. Liste}],",
+      "  [Abwesende Personen:],                        [${4:s. Liste}],",
+      "  [Anwesende teilnahmeberechtigte Personen:],   [${5:s. Liste}],",
+      "  [Anwesende hinzugezogene Personen:],          [${6:s. Liste}],",
+      "  [Sitzungsort:],                               [$7],",
+      "  [Sitzungsform:],                              [${8|Präsenz,Online,Hybrid|}],",
+      "  [Sitzungszeit:],                              [${9:10:00} bis ${10:12:00} Uhr],",
+      ")",
+      "",
+      ""
+    ]
+  },
+  "Sitzung: Anlagen": {
+    "prefix": [
+      "anl"
+    ],
+    "body": "Anlagen:\n+ ${1:Anwesenheitsliste}\n+ ${2:Tagesordnung}\n\n"
+  },
+  "Sitzung: Begrüßung": {
+    "prefix": [
+      "sbg"
+    ],
+    "body": "Die Sitzungsleitung begrüßt die anwesenden Sitzungsteilnehmer*innen und eröffnet die Sitzung. Es wird auf den Ablauf der Sitzung aufmerksam gemacht.\n\n"
+  },
+  "Sitzung: Beschlussfähigkeit": {
+    "prefix": [
+      "bf",
+      "sbf"
+    ],
+    "body": "Das Gremium ist beschlussfähig, wenn mindestens die Hälfte aller stimmberechtigten Mitglieder anwesend sind und die Sitzung ordnungsgemäß einberufen wurde. Die Einladung ist am ${1:TT.MM.JJJJ} rechtzeitig zugegangen. Das Gremium verfügt über $2 stimmberechtigte Mitglieder. Anwesend sind $3 stimmberechtigte Mitglieder. Die Beschlussfähigkeit wird ${4|festgestellt,nicht festgestellt|}.\n\n"
+  },
+  "Sitzung: Tagesordnung": {
+    "prefix": [
+      "sto"
+    ],
+    "body": "Die Tagesordnung wird ${1|in der vorliegenden Form,mit den genannten Änderungen|} beschlossen.\n\n#votes[${2:0}/${3:0}/${4:0}]\n\nDie Tagesordnung ist angenommen.\n\n"
+  },
+  "Sitzung: Schriftführung": {
+    "prefix": [
+      "ssf"
+    ],
+    "body": "Die Sitzungsleitung bestimmt #n[$1] als schriftführende Person.\n\n"
+  },
+  "Sitzung: Protokoll genehmigen": {
+    "prefix": [
+      "spr"
+    ],
+    "body": "Das Gremium stimmt über die Niederschrift der ${1:letzten} Sitzung ab:\n\n#votes[${2:0}/${3:0}/${4:0}]\n\nDie Niederschrift ist ${5|ohne Änderungen,mit den genannten Änderungen|} genehmigt.\n\n"
+  },
+  "Sitzung: Gäste": {
+    "prefix": [
+      "sga"
+    ],
+    "body": "Das Gremium lässt die folgenden Gäste zu:\n- #n[$1]\n- #n[$2]\n\n#votes[${3:0}/${4:0}/${5:0}]\n\nDie Gäste sind zugelassen.\n\n"
+  },
+  "Sitzung: Stimmübertragung": {
+    "prefix": [
+      "sst"
+    ],
+    "body": "#n[$1] überträgt die Stimme auf #n[$2].\n\n"
+  },
+  "Sitzung: Person betritt": {
+    "prefix": [
+      "sbe"
+    ],
+    "body": "#n[$1] betritt die Sitzung um ${2:$CURRENT_HOUR:$CURRENT_MINUTE} Uhr.\n\n"
+  },
+  "Sitzung: Person verlässt": {
+    "prefix": [
+      "sve"
+    ],
+    "body": "#n[$1] verlässt die Sitzung um ${2:$CURRENT_HOUR:$CURRENT_MINUTE} Uhr.\n\n"
+  },
+  "Sitzung: Anwesenheit": {
+    "prefix": [
+      "san"
+    ],
+    "body": "Es sind nun $1 stimmberechtigte Mitglieder anwesend.\n\n"
+  },
+  "Sitzung: Unterbrechung": {
+    "prefix": [
+      "sun"
+    ],
+    "body": "Die Sitzung wird von ${1:$CURRENT_HOUR:$CURRENT_MINUTE} bis $2 Uhr unterbrochen.\n\n"
+  },
+  "Sitzung: Schließung": {
+    "prefix": [
+      "sen"
+    ],
+    "body": "Die Sitzungsleitung schließt die Sitzung um ${1:$CURRENT_HOUR:$CURRENT_MINUTE} Uhr.\n\n"
+  },
+
+  "Struktur: TOP": {
+    "prefix": [
+      "top"
+    ],
+    "body": "#agendaitem(\"${1:1} ${2:Titel}\")\n\n"
+  },
+  "Struktur: TOP aus Tagesordnung": {
+    "prefix": [
+      "tp"
+    ],
+    "body": "#top(\"${1:Titel oder Nummer}\")\n\n",
+    "description": "TOP aus agenda.txt"
+  },
+  "TOP: Aufruf": {
+    "prefix": [
+      "tar"
+    ],
+    "body": "Der Tagesordnungspunkt wird um ${2:$CURRENT_HOUR:$CURRENT_MINUTE} Uhr aufgerufen.\n\n"
+  },
+  "Struktur: Teil-Überschrift": {
+    "prefix": [
+      "tei"
+    ],
+    "body": "#part[${1:Öffentlicher Teil}]\n\n"
+  },
+  "Struktur: Nichtöffentlicher Teil": {
+    "prefix": [
+      "nft"
+    ],
+    "body": "Der nichtöffentliche Teil der Sitzung beginnt.\n\n#redact[\n\n$1\n\n]"
+  },
+  "Struktur: Schwärzen": {
+    "prefix": [
+      "red"
+    ],
+    "body": "#redact[${1:$TM_SELECTED_TEXT}]",
+    "description": "Ab Sensitivität 2 geschwärzt"
+  },
+  "Struktur: Name": {
+    "prefix": [
+      "nn"
+    ],
+    "body": "#n[${1:$TM_SELECTED_TEXT}] $2",
+    "description": "Ab Sensitivität 3 anonymisiert"
+  },
+  "Struktur: Keine Themen": {
+    "prefix": [
+      "kth"
+    ],
+    "body": "Keine Themen.\n\n"
+  },
+
+  "Bericht: Kurz": {
+    "prefix": [
+      "bea"
+    ],
+    "body": "$1 erstattet Bericht.\n\n"
+  },
+  "Bericht: Sachstand": {
+    "prefix": [
+      "beb"
+    ],
+    "body": "$1 berichtet den Sachstand zum Thema $1. $2\n\n"
+  },
+  "Bericht: Meinungsbild": {
+    "prefix": [
+      "mb"
+    ],
+    "body": "Das Gremium bildet ein Meinungsbild zu $1:\n\n#votes[${2:0}/${3:0}/${4:0}]\n\n"
+  },
+  "Antrag: Kurz": {
+    "prefix": [
+      "aku",
+      "ant"
+    ],
+    "body": "Dem Gremium liegt der Antrag zur Beschlussfassung eingereicht von $1 vor. Der Antrag wurde form- und fristgerecht eingereicht.\n\n"
+  },
+  "Antrag: Lang": {
+    "prefix": [
+      "ala"
+    ],
+    "body": "Dem Gremium liegt der Antrag \"$1\" zur Beschlussfassung eingereicht von $2 vor. Der Antrag wurde form- und fristgerecht eingereicht.\n\n"
+  },
+
+  "Antrag: Änderung": {
+    "prefix": [
+      "aen"
+    ],
+    "body": "$1 stellt einen Änderungsantrag zu $2: $3"
+  },
+
+  "Antrag: Wort": {
+    "prefix": [
+      "awo"
+    ],
+    "body": "Als antragstellende Person erhält #n[$1] das Wort.\n\n"
+  },
+  "Antrag: Beratung": {
+    "prefix": [
+      "abr"
+    ],
+    "body": "Das Gremium berät den vorliegenden Antrag.\n\n"
+  },
+  "Antrag: Abstimmung": {
+    "prefix": [
+      "abs"
+    ],
+    "body": "Das Gremium stimmt über den vorliegenden ${1|Antrag,Änderungsantrag,geänderten Antrag|} ab:\n\n#votes[${2:0}/${3:0}/${4:0}]\n\n"
+  },
+  "Antrag: Stimmen": {
+    "prefix": [
+      "vo"
+    ],
+    "body": "#votes[${1:0}/${2:0}/${3:0}]\n\n",
+    "description": "Ja/Nein/Enthaltung[/Nicht abgegeben]"
+  },
+  "Antrag: Angenommen": {
+    "prefix": [
+      "ang"
+    ],
+    "body": "Der Antrag ist damit angenommen.\n\n"
+  },
+  "Antrag: Abgelehnt": {
+    "prefix": [
+      "abg"
+    ],
+    "body": "Der Antrag ist damit abgelehnt.\n\n"
+  },
+  "Antrag: Zurückgezogen": {
+    "prefix": [
+      "azu"
+    ],
+    "body": "Der Antrag wird von $1 zurückgezogen.\n\n"
+  },
+
+  "GO: GO-Antrag": {
+    "prefix": [
+      "go"
+    ],
+    "body": "$1 stellt Antrag auf ${2|Schluss der Redeliste,Öffnung der Redeliste,Verzicht auf die Wahlhandlung,Schluss der Debatte,sofortige Abstimmung,Vertagung,Nichtbefassung,Unterbrechung der Sitzung,Begrenzung der Redezeit,Ausschluss der Öffentlichkeit|}. Der Antrag ist zulässig. ",
+    "description": "Antrag zur Geschäftsordnung"
+  },
+  "GO: Gegenrede": {
+    "prefix": [
+      "gge"
+    ],
+    "body": "$1 leistet Gegenrede. Es wird über den Antrag abgestimmt:\n\n#votes[${2:0}/${3:0}/${4:0}]\n\n",
+    "description": "GO-Antrag mit Gegenrede und Abstimmung"
+  },
+  "GO: Angenommen": {
+    "prefix": [
+      "gan"
+    ],
+    "body": "Der Antrag ist ohne Gegenrede angenommen.\n\n",
+    "description": "Annahme eines GO-Antrags ohne Gegenrede"
+  },
+  "Antrag: Geheime Abstimmung": {
+    "prefix": [
+      "agh"
+    ],
+    "body": "${1:Ein Mitglied} beantragt eine geheime Abstimmung. Der Antrag ist zulässig und gilt sofort als angenommen.\n\n"
+  },
+
+  "Wahl: Wahl Einleiutng": {
+    "prefix": [
+      "wa"
+    ],
+    "body": "Das Gremium wählt ${1:X Mitglieder für Zweck}.\n\n"
+  },
+  "Wahl: Kandidaturen": {
+    "prefix": [
+      "wka"
+    ],
+    "body": "Es kandidieren:\n\n+ #n[$1]\n+ #n[$2]\n\n"
+  },
+  "Wahl: Vorstellung": {
+    "prefix": [
+      "wvo"
+    ],
+    "body": "Die Kandidierenden stellen sich vor und beantworten Fragen aus dem Plenum.\n\n"
+  },
+  "Wahl: Wahlgang": {
+    "prefix": [
+      "wga"
+    ],
+    "body": [
+      "${1|Erster,Zweiter,Dritter|} Wahlgang:",
+      "#elect(",
+      "  \"$2\", ${3:0},",
+      "  \"$4\", ${5:0},",
+      ")",
+      "",
+      ""
+    ]
+  },
+  "Wahl: Wahlgang Ja/Nein": {
+    "prefix": [
+      "wgj"
+    ],
+    "body": [
+      "${1|Erster,Zweiter,Dritter|} Wahlgang:",
+      "#qtable(",
+      "  n[$2], [${3:0} Ja / ${4:0} Nein / ${5:0} Enthaltungen],",
+      "  n[$6], [${7:0} Ja / ${8:0} Nein / ${9:0} Enthaltungen],",
+      ")",
+      "",
+      ""
+    ]
+  },
+  "Wahl: Blockwahl": {
+    "prefix": [
+      "wbl"
+    ],
+    "body": "Das Gremium beschließt, #n[$1] und #n[$2] ${3:in den Ausschuss} zu wählen.\n\n#votes[${4:0}/${5:0}/${6:0}]\n\n"
+  },
+  "Wahl: Ergebnis": {
+    "prefix": [
+      "wer"
+    ],
+    "body": "Das Gremium wählt ${1:Name(n) Zweck}.\n\n"
+  },
+  "Wahl: Annahme": {
+    "prefix": [
+      "wan"
+    ],
+    "body": "#n[$1] nimmt die Wahl ${2|an,nicht an|}.\n\n"
+  },
+  "Wahl: Annahme (mehrere)": {
+    "prefix": [
+      "wgn"
+    ],
+    "body": "Die Gewählten nehmen die Wahl an.\n\n"
+  },
+  "Wahl: Abwesend gewählt": {
+    "prefix": [
+      "wab"
+    ],
+    "body": "Die gewählten Personen sind nicht anwesend und werden von der Sitzungsleitung kontaktiert.\n\n"
+  }
+}

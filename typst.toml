@@ -1,0 +1,15 @@
+[package]
+name = "fast-minutes"
+version = "0.0.1"
+entrypoint = "src/lib.typ"
+authors = ["nilsfast"]
+license = "MIT"
+description = "Session minute template"
+repository = "https://github.com/nilsfast/fast-minutes"
+keywords = ["minutes"]
+categories = ["office"]
+
+[template]
+path = "template/src"
+entrypoint = "main.typ"
+thumbnail = "template/thumbnail.png"
