@@ -5,28 +5,38 @@
   committee: "Vorstand",
   session: "1. Sitzung des Vorstandes",
   date: datetime(year: 2025, day: 1, month: 10),
-  // Set this to 1, 2 or 3 and watch what happens:
-  sensitivity: 3, 
+  // Set these to false and watch what happens:
+  redact: true, // black out #redact[…]
+  anonymize: true, // replace #n[…] with "Name Zensiert"
   logo: image("capitol.png"),
-  agenda: read("agenda.txt"),
+  agenda: toml("agenda.toml"),
   names: toml("names.toml"),
 )
 
 #qtable(
-  [Sitzungsleitung:],                          n[bs],
-  [Schriftführende Person:],                    n[er],
-  [Anwesende Personen:],                       [s. Liste],
-  [Abwesende Personen:],                       [s. Liste],
-  [Anwesende teilnahmeberechtigte Personen:],   [s. Liste],
-  [Anwesende hinzugezogene Personen:],          [s. Liste],
-  [Sitzungsort:],                              [Büro],
-  [Sitzungsform:],                             [Präsenz],
-  [Sitzungszeit:],                             [10:30 bis ca. 17:30 Uhr],
+  [Sitzungsleitung:],
+  n[bs],
+  [Schriftführende Person:],
+  n[er],
+  [Anwesende Personen:],
+  [s. Liste],
+  [Abwesende Personen:],
+  [s. Liste],
+  [Anwesende teilnahmeberechtigte Personen:],
+  [s. Liste],
+  [Anwesende hinzugezogene Personen:],
+  [s. Liste],
+  [Sitzungsort:],
+  [Büro],
+  [Sitzungsform:],
+  [Präsenz],
+  [Sitzungszeit:],
+  [10:30 bis ca. 17:30 Uhr],
 )
 
 Anlagen:
-+ Anwesenheitsliste 
-+ Tagesordnung 
++ Anwesenheitsliste
++ Tagesordnung
 
 #top("Begrüßung")
 
@@ -45,9 +55,12 @@ Das Gremium berät den vorliegenden Antrag.
 Das Gremium wählt zwei Personen ind den Kontrollausschuss.
 
 #elect(
-  "ulf", 8,
-  "eri", 2,
-  "er", 0,
+  "ulf",
+  8,
+  "eri",
+  2,
+  "er",
+  0,
 )
 
 Das Gremium wählt #n[ulf] in den Kontrollausschuss.
@@ -56,17 +69,23 @@ Das Gremium wählt #n[ulf] in den Kontrollausschuss.
 #top(4)
 #redact[
 
-Dem Gremium liegt der Antrag zur Beschlussfassung eingereicht von #n[ts] vor. Der Antrag wurde form- und fristgerecht eingereicht.
+  Dem Gremium liegt der Antrag zur Beschlussfassung eingereicht von #n[ts] vor. Der Antrag wurde form- und fristgerecht eingereicht.
 
-Das Gremium berät den vorliegenden Antrag.
+  Das Gremium berät den vorliegenden Antrag.
 
-Das Gremium stimmt über den vorliegenden Antrag ab:
+  Das Gremium stimmt über den vorliegenden Antrag ab:
 
-#votes[10/0/0/0]
+  #votes[10/0/0/0]
 
-Der Antrag ist damit angenommen.
+  Der Antrag ist damit angenommen.
 
 ]
+
+#top("5")
+
+Keine Themen.
+
+
 
 #top("5b")
 

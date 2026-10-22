@@ -1,13 +1,14 @@
 
 
-#let s = state("sensitivity", 0)
+#let redact-s = state("redact", false)
+#let anonymize-s = state("anonymize", false)
 #let names-s = state("names", (:))
 #let agenda-s = state("agenda", ())
 
 // author: GeorgeMuscat
 #let redact(body) = {
   context {
-    if s.get() > 1 {
+    if redact-s.get() {
       show text: it => {
         box(rect(fill: black, height: 1em)[#hide(it)])
       }
@@ -25,7 +26,7 @@
     let key = if type(text) == str { text } else if text.has("text") { text.text }
     // für typst query "<n>": wer wird auf welcher Seite genannt
     [#metadata((name: key, page: here().page())) <n>]
-    let name = if s.get() > 2 { [_Name Zensiert_] } else { names-s.get().at(key, default: text) }
+    let name = if anonymize-s.get() { [_Name Zensiert_] } else { names-s.get().at(key, default: text) }
     // typst compile --input check=bs: Nennungen von bs markieren
     if sys.inputs.at("check", default: none) == key { highlight(name) } else { [#name] }
   }
@@ -40,13 +41,13 @@
   [== TOP #box(number, width: 2em)  #name]
 }
 
-// TOP aus agenda.txt per Nummer oder Teil des Titels: #top("Wahl"), #top(3)
+// TOP aus der Tagesordnung per Nummer oder Teil des Titels: #top("Wahl"), #top(3)
 #let top(query) = context {
   let q = lower(str(query))
   let items = agenda-s.get()
   let item = items.find(it => lower(it.at(0)) == q)
   if item == none { item = items.find(it => lower(it.at(1)).contains(q)) }
-  assert(item != none, message: "TOP nicht in agenda.txt: " + str(query))
+  assert(item != none, message: "TOP nicht in der Tagesordnung: " + str(query))
   agendaitem(item.join(" "))
 }
 
@@ -132,21 +133,30 @@
   committee: none,
   session: none,
   date: none,
-  sensitivity: none,
-  /* 1:  Alles sichtbar
-     2:  Nicht-öffentliches geschwärtz
-     3.  Nicht-öffentliches geschwärtz + Namen Anonymisiert */
+  redact: false,    // #redact[…] schwärzen
+  anonymize: false, // #n[…] durch "Name Zensiert" ersetzen
   logo: none,
   agenda: none, // read("agenda.txt"): eine Zeile pro TOP, "Nummer Titel"
+                // oder toml("agenda.toml"): 1 = "Titel" bzw. [3] title = "Titel", a = "Unterpunkt" -> 3a
   names: none,  // toml("names.toml"): abkürzung = "Voller Name"
   body,
 ) = {
   // Set and show rules from before.
-  s.update(sensitivity)
+  redact-s.update(redact)
+  anonymize-s.update(anonymize)
   assert(names == none or type(names) == dictionary, message: "names: toml(\"names.toml\") statt \"names.toml\" verwenden")
-  assert(agenda == none or not agenda.ends-with(".txt"), message: "agenda: read(\"agenda.txt\") statt \"agenda.txt\" verwenden")
+  assert(type(agenda) != str or not (agenda.ends-with(".txt") or agenda.ends-with(".toml")), message: "agenda: read(\"agenda.txt\") bzw. toml(\"agenda.toml\") statt Dateiname verwenden")
   if names != none { names-s.update(names) }
-  if agenda != none {
+  // verschachtelte TOML-Tagesordnung zu (Nummer, Titel)-Paaren abflachen
+  let flatten(dict, prefix) = dict.pairs().map(((key, value)) => {
+    if type(value) == str { ((prefix + key, value),) } else {
+      let title = value.remove("title")
+      ((prefix + key, title),) + flatten(value, prefix + key)
+    }
+  }).join(default: ())
+  if type(agenda) == dictionary {
+    agenda-s.update(flatten(agenda, ""))
+  } else if agenda != none {
     agenda-s.update(agenda.split("\n").map(str.trim).filter(l => l != "").map(l => {
       let (nr, ..title) = l.split(" ")
       (nr, title.join(" "))

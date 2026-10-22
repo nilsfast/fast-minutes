@@ -1,0 +1,9 @@
+1 = "Begrüßung"
+2 = "Diverse Anträge"
+3 = "Wahl in den Kontrollausschuss"
+4 = "Diverses nichtöffentlich"
+
+[5]
+title = "Diverses"
+a = "Termine"
+b = "Test"

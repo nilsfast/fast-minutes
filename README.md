@@ -28,9 +28,10 @@ For the [snippets](#snippets) (German only), copy `.vscode/fast-minutes.code-sni
   committee: "Vorstand",
   session: "1. Sitzung des Vorstandes",
   date: datetime(year: 2025, month: 10, day: 1),
-  sensitivity: 1,
+  redact: false,                // optional
+  anonymize: false,             // optional
   logo: image("logo.png"),
-  agenda: read("agenda.txt"),   // optional
+  agenda: toml("agenda.toml"),  // optional
   names: toml("names.toml"),    // optional
 )
 
@@ -40,24 +41,30 @@ For the [snippets](#snippets) (German only), copy `.vscode/fast-minutes.code-sni
 
 See [template/src/main.typ](template/src/main.typ) for a complete example.
 
-### Sensitivity
+### Redaction and anonymisation
 
-One source file can produce several versions of the minutes:
+One source file can produce several versions of the minutes. The two settings are independent:
 
-| `sensitivity` | Effect                                                          |
-| ------------- | --------------------------------------------------------------- |
-| `1`           | Everything visible (internal version)                           |
-| `2`           | Content inside `#redact[…]` is blacked out                      |
-| `3`           | Like 2, and every `#n[…]` name is replaced with _Name Zensiert_ |
+| Setting           | Effect                                                    |
+| ----------------- | --------------------------------------------------------- |
+| `redact: true`    | Content inside `#redact[…]` is blacked out                |
+| `anonymize: true` | Every `#n[…]` name is replaced with _Name Zensiert_       |
 
 ### Agenda and names
 
-`agenda.txt` holds one agenda item per line, number first:
+`agenda.toml` maps numbers to titles. A table is a TOP with sub-items, whose keys are appended to its number:
 
+```toml
+1 = "Begrüßung"
+2 = "Berichte"
+
+[3]
+title = "Wahlen"
+a = "Wahl in den Kontrollausschuss"
+b = "Wahl in den Vorstand"
 ```
-1 Begrüßung
-3a Wahl in den Kontrollausschuss
-```
+
+Tables can be nested further (`[3.b]` gives `3b…`). A plain list also works, via `agenda: read("agenda.txt")` with one item per line, number first (`3a Wahl in den Kontrollausschuss`).
 
 `#top("Wahl")` then inserts `TOP 3a Wahl in den Kontrollausschuss`. An unknown item is a compile error.
 
@@ -85,14 +92,14 @@ done
 
 | Function                                               | Purpose                                                                                          |
 | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
-| `minutes.with(body, session, date, sensitivity, logo)` | Document setup: page layout, logo header, title "Niederschrift der … am …"                       |
+| `minutes.with(body, session, date, redact, anonymize, logo, agenda, names)` | Document setup: page layout, logo header, title "Niederschrift der … am …"                       |
 | `#qtable(..cells)`                                     | Borderless two-column table, e.g. for the session data                                           |
 | `#agendaitem("3a Titel")`                              | Agenda item heading: the first word is the number, the rest is the title                         |
 | `#inhalt()`                                            | Table of contents of all TOPs with page numbers; `title:` changes the heading (default _Inhalt_) |
-| `#top("Wahl")`, `#top(3)`                              | Agenda item from `agenda.txt`, found by number or by part of the title                           |
+| `#top("Wahl")`, `#top(3)`                              | Agenda item from the agenda file, found by number or by part of the title                           |
 | `#part[Titel]`                                         | Centered bold heading, e.g. for "Nichtöffentlicher Teil"                                         |
-| `#n[Name]`, `#n[bs]`                                   | Marks a name, which is anonymised at sensitivity 3. Abbreviations from `names.toml` are expanded |
-| `#redact[…]`                                           | Marks a non-public passage, which is blacked out at sensitivity ≥ 2                              |
+| `#n[Name]`, `#n[bs]`                                   | Marks a name, which is anonymised with `anonymize: true`. Abbreviations from `names.toml` are expanded |
+| `#redact[…]`                                           | Marks a non-public passage, which is blacked out with `redact: true`                             |
 | `#votes[Ja/Nein/Enthaltung]`                           | Voting result; an optional fourth value is _Nicht abgegeben_                                     |
 | `#elect("Name", 8, "Name", 2)`                         | Election result table (names go through `n`)                                                     |
 
@@ -108,7 +115,7 @@ Prefixes are grouped by their first letter (`s…` Sitzung, `a…` Antrag, `g…
 
 | Prefix      | Snippet              | Inserts                                                                      |
 | ----------- | -------------------- | ---------------------------------------------------------------------------- |
-| `smin`      | Dokumentkopf         | `#show: minutes.with(…)` with Gremium, session, date, sensitivity, logo      |
+| `smin`      | Dokumentkopf         | `#show: minutes.with(…)` with Gremium, session, date, redact, anonymize, logo      |
 | `si`        | Sitzungsdaten        | `#qtable` with Sitzungsleitung, Schriftführung, attendees, place, form, time |
 | `anl`       | Anlagen              | List of attachments                                                          |
 | `sbg`       | Begrüßung            | Sitzungsleitung opens the session                                            |
@@ -129,7 +136,7 @@ Prefixes are grouped by their first letter (`s…` Sitzung, `a…` Antrag, `g…
 | Prefix | Snippet                | Inserts                                               |
 | ------ | ---------------------- | ----------------------------------------------------- |
 | `top`  | TOP                    | `#agendaitem("1 Titel")`                              |
-| `tp`   | TOP aus Tagesordnung   | `#top("…")` from `agenda.txt`                         |
+| `tp`   | TOP aus Tagesordnung   | `#top("…")` from the agenda file                         |
 | `tar`  | Aufruf                 | TOP called at … Uhr                                   |
 | `tew`  | Einleitung             | Sitzungsleitung says a few introductory words         |
 | `tvs`  | Verschoben             | _Tagesordnungspunkt verschoben vom Vortag_            |

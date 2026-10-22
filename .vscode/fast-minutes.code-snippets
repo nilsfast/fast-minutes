@@ -8,13 +8,14 @@
       "  committee: \"${1:Gremium}\",",
       "  session: \"${2:1. Sitzung des Gremiums}\",",
       "  date: datetime(year: ${3:$CURRENT_YEAR}, month: ${4:$CURRENT_MONTH}, day: ${5:$CURRENT_DATE}),",
-      "  sensitivity: ${6|1,2,3|},",
-      "  logo: image(\"${7:logo.png}\"),",
+      "  redact: ${6|false,true|},",
+      "  anonymize: ${7|false,true|},",
+      "  logo: image(\"${8:logo.png}\"),",
       ")",
       "",
       ""
     ],
-    "description": "minutes.with(...) mit Gremium, Sitzung, Datum, Sensitivität, Logo"
+    "description": "minutes.with(...) mit Gremium, Sitzung, Datum, Schwärzen, Anonymisieren, Logo"
   },
   "Sitzung: Sitzungsdaten": {
     "prefix": [
@@ -127,7 +128,7 @@
       "tp"
     ],
     "body": "#top(\"${1:Titel oder Nummer}\")\n\n",
-    "description": "TOP aus agenda.txt"
+    "description": "TOP aus der Tagesordnung"
   },
   "TOP: Aufruf": {
     "prefix": [
